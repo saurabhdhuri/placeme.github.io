@@ -1,0 +1,410 @@
+﻿
+@{
+    ViewBag.Title = "Manage User Schedule";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var admin = Session["Admin"] as PlaceMe.Models.Admin;
+
+    var userapplications = ViewBag.userapplications as IEnumerable<PlaceMe.Models.UserApplication>;
+    var userschedules = ViewBag.userschedules as IEnumerable<PlaceMe.Models.UserSchedule>;
+}
+@if (admin == null)
+{
+    Context.Response.Redirect(Url.Content("~/Authentication/AdminLogin"));
+}
+
+<style>
+    .job-details label, .company-details label {
+        font-size: large;
+        display: flex;
+        justify-content: center;
+    }
+
+    .form-control {
+        margin-left: 140px;
+    }
+
+
+    a {
+        color: inherit;
+    }
+
+        a:hover {
+            color: dodgerblue;
+        }
+</style>
+<div class="container">
+
+    <!-- Eligible Users List-->
+    <h2>Eligible Users</h2>
+    </br>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th>User Name</th>
+                <th>Company Name</th>
+                <th>Company Details</th>
+                <th>Job Details</th>
+                <th>Make Schedule</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in userapplications)
+            {
+                <tr>
+                    <td>@item.User.UserFirstName @item.User.UserLastName</td>
+                    <td>@item.Company.CompanyName</td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Companymodal_@item.ApplicationId" class="btn btn-info">View Details</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Jobmodal_@item.ApplicationId" class="btn btn-info">View Details</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Schedulemodal_@item.ApplicationId" class="btn btn-success">Create Schedule</button>
+                    </td>
+                </tr>
+
+                <!--Company Details -->
+                <div class="modal fade" id="Companymodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content company-details">
+                            <div class="container-fluid">
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Company Details</h2>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <label><u>Company Description:</u>&nbsp;&nbsp; <i>@item.Company.CompanyDescription</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>Company Email:</u> &nbsp; &nbsp;<i>@item.Company.CompanyEmailId</i></label>
+                                        <label><u>Company Contact No.: </u> &nbsp; &nbsp;<i>@item.Company.CompanyContact</i></label>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--Job Details -->
+                <div class="modal fade" id="Jobmodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content job-details">
+                            <div class="container-fluid">
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Job Details</h2>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <label><u>Job Profile:</u>&nbsp; &nbsp;<i> @item.Company.JobProfile</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>Openings: </u>&nbsp; &nbsp;<i>@item.Company.JobOpenings</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>Requirements:</u> &nbsp; &nbsp;<i> @item.Company.JobRequirements</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>SSC Criteria:</u> &nbsp;&nbsp;<i> @item.Company.SscCriteria</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>HSC Criteria: </u>&nbsp;&nbsp;<i> @item.Company.HscCriteria</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label>Company/Job related Documents (if any):</label>
+                                        <div class="row">
+                                            <label><a href="@item.Company.DocAttachment1" download="">@item.Company.DocAttachment1 </a></label>
+                                        </div>
+                                        <div class="row">
+                                            <label><a href="@item.Company.DocAttachment2" download="">@item.Company.DocAttachment2 </a></label>
+                                        </div>
+                                        <div class="row">
+                                            <label><a href="@item.Company.DocAttachment3" download="">@item.Company.DocAttachment3 </a></label>
+                                        </div>
+                                        <div class="row">
+                                            <label><a href="@item.Company.DocAttachment4" download="">@item.Company.DocAttachment4 </a></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--Generate Schedule -->
+                <div class="modal fade" id="Schedulemodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                @using (Html.BeginForm("AddUserSchedule", "Admin", new { }))
+                                {
+                                    <div class="modal-header">
+                                        <div class="row">
+                                            <h2>Add Schedule Details</h2>
+                                            <input type="text" name="AdminName" value="@admin.AdminName" hidden />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Add Interview Title:</label>
+                                                <input type="text" class="form-control" name="InterviewName" placeholder="Enter Interview Title" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Add Interview Description:</label>
+                                                <textarea class="form-control" name="InterviewDescription" placeholder="Enter Interview Description" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Add Interview Date/Time:</label>
+                                                <input type="datetime-local" class="form-control" name="InterviewDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <a data-toggle="collapse" href="#collapse-doc_@item.ApplicationId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                <h4>Add Company/Job related Documents (if any)<span class="caret"></span></h4>
+                                            </a>
+                                            <div class="collapse" id="collapse-doc_@item.ApplicationId">
+                                                <div class="form-group">
+                                                    <label>Attach Document 1:</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc1">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Attach Document 2:</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc2">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Attach Document 3:</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc3">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Attach Document 4:</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+
+                                                <input type="text" name="UserId" value="@item.UserId" hidden />
+                                                <input type="text" name="CompanyId" value="@item.CompanyId" hidden />
+                                                <input type="text" name="ApplicationId" value="@item.ApplicationId" hidden />
+                                                <button type="submit" name="AddSchedule" class="btn btn-info">Create Schedule</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+
+        </tbody>
+
+    </table>
+
+    <br />
+
+    <h2>User Schedules</h2>
+    </br>
+    <!-- User Schedules-->
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th>User Name</th>
+                <th>Company Name</th>
+                <th>Interview Title</th>
+                <th>Interview Date</th>
+                <th>Edit Schedule</th>
+                <th>Delete Schedule</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item2 in userschedules)
+            {
+                <tr>
+                    <td>@item2.User.UserFirstName @item2.User.UserLastName</td>
+                    <td>@item2.Company.CompanyName</td>
+                    <td>@item2.InterviewName</td>
+                    <td>@item2.InterviewDate</td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Editmodal_@item2.ScheduleId" class="btn btn-info">Edit</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Deletemodal_@item2.ScheduleId" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+
+
+
+                <!--Edit Schedule Details -->
+                <div class="modal fade" id="Editmodal_@item2.ScheduleId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                @using (Html.BeginForm("UpdateUserSchedule", "Admin", new { }))
+                                {
+                                    <div class="modal-header">
+                                        <div class="row">
+                                            <h2>Edit Schedule Details:</h2>
+                                            <input type="text" name="AdminName" value="@admin.AdminName" hidden />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Edit Interview Title:</label>
+                                                <input type="text" class="form-control" name="InterviewNameEdit" value="@item2.InterviewName">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Edit Interview Description:</label>
+                                                <textarea class="form-control" name="InterviewDescriptionEdit">@item2.InterviewDescription></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Edit Interview Date/Time:</label>
+                                                <input type="datetime" class="form-control" name="InterviewDateEdit" value="@item2.InterviewDate">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <a data-toggle="collapse" href="#collapse-doc-edit_@item2.ScheduleId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                <h4>Edit Company/Job related Documents (if any)<span class="caret"></span></h4>
+                                            </a>
+                                            <div class="collapse" id="collapse-doc-edit_@item2.ScheduleId">
+                                                <div class="form-group">
+                                                    <label>Doc 1: &nbsp;@item2.InterviewDoc1</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc1Edit" value="@item2.InterviewDoc1">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Doc 2: &nbsp;@item2.InterviewDoc2</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc2Edit" value="@item2.InterviewDoc2">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Doc 3: &nbsp;@item2.InterviewDoc3</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc3Edit" value="@item2.InterviewDoc3">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Doc 4: &nbsp;@item2.InterviewDoc4</label>
+                                                    <input type="file" class="form-control" name="InterviewDoc4Edit" value="@item2.InterviewDoc4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+
+                                                <input type="text" name="UserId" value="@item2.UserId" hidden />
+                                                <input type="text" name="CompanyId" value="@item2.CompanyId" hidden />
+                                                <input type="text" name="ApplicationId" value="@item2.ApplicationId" hidden />
+                                                <input type="text" name="ScheduleId" value="@item2.ScheduleId" hidden />
+                                                <button type="submit" name="EditSchedule" class="btn btn-info">Create Schedule</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                <!--Delete Schedule -->
+                <div class="modal fade" id="Deletemodal_@item2.ScheduleId" tabindex="-1" role="dialog">
+
+                    @using (Html.BeginForm("DeleteUserSchedule", "Admin", new { }))
+                    {
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="container-fluid">
+                                    <div class="modal-header">
+                                        <div class="row">
+                                            <h2>Confirm Delete Schedule?</h2>
+                                            <input type="text" value="@item2.ScheduleId" name="ScheduleId" hidden />
+                                            <input type="text" value="@admin.AdminName" name="AdminName" hidden />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <label>@item2.InterviewName</label>
+                                        </div>
+                                        <div class="row">
+                                            <label>Candidate Name: @item2.User.UserFirstName @item2.User.UserLastName</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" class="btn btn-info">Close</button>
+
+                                                <button type="submit" name="DeleteSchedule" class="btn btn-danger">Delete Schedule</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+
+            }
+        </tbody>
+
+    </table>
+
+</div>

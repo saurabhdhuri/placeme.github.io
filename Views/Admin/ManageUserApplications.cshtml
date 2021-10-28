@@ -1,0 +1,244 @@
+﻿
+@{
+    ViewBag.Title = "Manage User Applications";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var admin = Session["Admin"] as PlaceMe.Models.Admin;
+
+    var userapplications = ViewBag.userapplications as IEnumerable<PlaceMe.Models.UserApplication>;
+}
+
+@if (admin == null)
+{
+    Context.Response.Redirect(Url.Content("~/Authentication/AdminLogin"));
+}
+
+<style>
+    .modal-body label{
+        font-size:large;
+        display:flex;
+        justify-content:center;
+    }
+</style>
+<div class="container">
+
+    <!-- User Applications List-->
+    <h2>User Applications</h2>
+    <br />
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="info">
+                <th>User Name</th>
+                <th>User Email</th>
+                <th>Company Applied</th>
+                <th>Job Details </th>
+                <th>User Qualification Details</th>
+                <th>Eligible</th>
+                <th>Eligibility Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in userapplications)
+            {
+                <tr>
+
+                    <td>@item.User.UserFirstName @item.User.UserLastName</td>
+                    <td>@item.User.UserEmailId</td>
+                    <td>@item.Company.CompanyName</td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Jobmodal_@item.ApplicationId" class="btn btn-info">View Details</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Usermodal_@item.ApplicationId" class="btn btn-info">View Details</button>
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#Yesmodal_@item.ApplicationId" class="btn btn-success">YES</button>
+                        <button data-toggle="modal" data-target="#Nomodal_@item.ApplicationId" class="btn btn-danger">NO</button>
+                    </td>
+                    <td>
+                        @if (item.IsEligible == true)
+                        {
+                            <label class="bg-success">ELIGIBLE</label>
+                        }
+                        else if (item.IsEligible == false)
+                        {
+                            <label class="bg-danger">NOT ELIGIBLE</label>
+                        }
+                        else
+                        {
+                            <label>N/A</label>
+                        }
+                    </td>
+                </tr>
+
+                <!--Company Job Details -->
+                <div class="modal fade" id="Jobmodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Job Details For @item.Company.CompanyName</h2>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <label><u>Job Profile:</u>&nbsp;&nbsp;<i>@item.Company.JobProfile</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>Openings:</u>&nbsp;&nbsp;<i>@item.Company.JobOpenings</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>Requirements:</u>&nbsp;&nbsp;<i>@item.Company.JobRequirements</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>SSC Criteria:</u>&nbsp;&nbsp;<i>@item.Company.SscCriteria</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>HSC Criteria:</u>&nbsp;&nbsp;<i>@item.Company.HscCriteria</i>%</label>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--User Qualification Details -->
+                <div class="modal fade" id="Usermodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Qualification Details for @item.User.UserFirstName @item.User.UserLastName</h2>
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <label><u>SSC Percentage:</u>&nbsp;&nbsp;<i>@item.UserQualification.SscPercentage</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>HSC Percentage:</u>&nbsp;&nbsp;<i>@item.UserQualification.HscPercentage</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>UG Course Name:</u>&nbsp;&nbsp;<i>@item.UserQualification.UgCourseName</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>UG Percentage:</u>&nbsp;&nbsp;<i>@item.UserQualification.UgPercentage</i>%</label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>PG Course Name:</u>&nbsp;&nbsp;<i>@item.UserQualification.PgCourseName</i></label>
+                                    </div>
+                                    <div class="row">
+                                        <label><u>PG Percentage:</u>&nbsp;&nbsp;<i>@item.UserQualification.PgPercentage</i>%</label>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--YES Modal -->
+                <div class="modal fade" id="Yesmodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                @using (Html.BeginForm("UpdateUserApplication", "Admin", new { }))
+                                {
+                                    <div class="modal-header">
+                                        <div class="row">
+                                            <h2>Are you sure?</h2>
+                                            <input type="text" name="AdminName" value="@admin.AdminName" hidden />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <label>Confirm &nbsp;&nbsp;<i>@item.User.UserFirstName @item.User.UserLastName</i>&nbsp;&nbsp; is ELIGIBLE ?</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                                            
+                                                <input type="text" name="ApplicationId" value="@item.ApplicationId" hidden />
+                                                <input type="text" name="IsEligible" value="true" hidden />
+                                                <button type="submit" name="Eligible" class="btn btn-success">ELIGIBLE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--NO Modal -->
+                <div class="modal fade" id="Nomodal_@item.ApplicationId" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                @using (Html.BeginForm("UpdateUserApplication", "Admin", new { }))
+                                {
+                                    <div class="modal-header">
+                                        <div class="row">
+                                            <h2>Are you sure ?</h2>
+                                            <input type="text" name="AdminName" value="@admin.AdminName" hidden />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+
+                                            <label>Confirm &nbsp;&nbsp;<i>@item.User.UserFirstName @item.User.UserLastName</i>&nbsp;&nbsp; is NOT ELIGIBLE ?</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" class="btn btn-info">Close</button>
+                                            
+                                                <input type="text" name="ApplicationId" value="@item.ApplicationId" hidden />
+                                                <input type="text" name="IsEligible" value="false" hidden />
+                                                <button type="submit" name="NotEligible" class="btn btn-danger">NOT ELIGIBLE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </tbody>
+
+    </table>
+
+
+</div>

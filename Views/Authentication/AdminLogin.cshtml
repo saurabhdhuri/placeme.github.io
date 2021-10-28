@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "AdminLogin";
+    
+}
+
+<style>
+    .container-user-login {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .user-login {
+        background-color: #08bc8c;
+        height: 100%;
+        width: 40%;
+        text-align: center;
+        justify-content: center;
+        border-radius: 31px;
+        margin-top: 100px;
+    }
+    input {
+        margin-left:22%;
+    }
+    
+</style>
+
+<div class="container-user-login">
+
+    
+    <div class="user-login">
+        <h1>Admin Login</h1>
+        @using (Html.BeginForm("AdminLogin", "Authentication", FormMethod.Post, new { }))
+        {
+            <div class="row">
+                <div class="form-group">
+                    <label>Email Id:</label>
+                    <input type="email" class="form-control" name="AdminEmailId" placeholder="Enter Email Id" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" name="Password" placeholder="Enter Password" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default" style="background-color:black;">Login</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <span class="label label-danger">@ViewBag.Message</span>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "UserRegistration";
+}
+<script>
+    function myFunction() {
+        var x = document.getElementById("pass").value;
+        var y = document.getElementById("confirmpass").value;
+        if (x==y) {
+            document.getElementById("match").innerHTML = "Passwords Match!";
+        }
+        else {
+            document.getElementById("match").innerHTML = "Passwords not Matching";
+        }
+        
+    }
+</script>
+
+<style>
+
+    .register-box {
+        width: 45%;
+        height: 560px;
+        text-align: center;
+        background-color: #08bc8c;
+        border-radius: 40px;
+    }
+
+    input {
+        margin-left: 20%;
+    }
+
+    .container-register {
+        background-color: #08bc8c;
+        height: 560px;
+        width: auto;
+        margin: 40px -50px;
+        border-radius: 40px;
+    }
+    .register-img {
+        background-image: url(../../Content/images/Stamp-duty-and-registration-charges-in-West-Bengal-FB-1200x700-compressed.jpg);
+        height: 560px;
+        width: 711px;
+        float: right;
+        margin: -560px 0px;
+        border-radius: 40px;
+    }
+</style>
+
+<div class="container">
+    <div class="container-register">
+        @using (Html.BeginForm("UserRegistration", "Authentication", FormMethod.Post, new { }))
+        {
+            <div class="register-box">
+                <div class="container-fluid">
+                    <div class="row">
+                        <h2>User Registration</h2>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>First Name:</label>
+                            </div>
+                            <input type="text" class="form-control" name="UserFirstName" placeholder="Enter First Name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>Last Name:</label>
+                            </div>
+                            <input type="text" class="form-control" name="UserLastName" placeholder="Enter Last Name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>Email Id:</label>
+                            </div>
+                            <input type="email" class="form-control" name="UserEmailId" placeholder="someone@example.com" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>Password:</label>
+                            </div>
+                            <input type="password" id="pass" class="form-control" name="Password" placeholder="Enter Password" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>Confirm Password:</label>
+                            </div>
+                            <input type="password" id="confirmpass" class="form-control" name="ConfirmPassword" placeholder="Enter Last Name" oninput="myFunction()" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <label>Contact No.:</label>
+                            </div>
+                            <input type="tel" class="form-control" name="UserContact" placeholder="Enter Contact no.">
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="row">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default" style="background-color:black;">Register</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <span class="label label-danger" id="match">@ViewBag.Message</span>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="register-img">
+            
+        </div>
+    </div>
+
+</div>

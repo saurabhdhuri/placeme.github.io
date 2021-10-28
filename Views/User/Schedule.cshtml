@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Schedule";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = Session["User"] as PlaceMe.Models.User;
+
+    var userschedules = ViewBag.userschedules as IEnumerable<PlaceMe.Models.UserSchedule>;
+}
+
+
+@if (user == null)
+{
+    
+    Context.Response.Redirect(Url.Content("~/Authentication/UserLogin"));
+}
+
+<style>
+    .container-fluid {
+        background-color: #08bc8c;
+        border-radius: 150px;
+        height:550px;
+        
+    }
+    .schedule-card {
+        height: 500px;
+        margin-top: 25px;
+        background-color: black;
+        border-radius: 150px;
+        text-align: center;
+        color: white;
+    }
+    h3 {
+       font-weight:bolder;
+    }
+    i {
+        background-color:black;
+        padding:5px 5px 5px 5px;
+
+    }
+    
+
+</style>
+
+
+<div class="container">
+    <h1>My Schedules: </h1>
+    <br />
+
+    <!--Interview Schedule Details-->
+
+    @foreach (var item in userschedules)
+    {
+        <div class="container-fluid">
+            <div class="schedule-card">
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-lg-3">
+                        <h3>Company Name:</h3>
+                        <span>@item.Company.CompanyName</span>
+                    </div>
+                    <div class="col-lg-9">
+                        <h3>Company Description:</h3>
+                        <span>@item.Company.CompanyDescription</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h3>Interview name:</h3>
+                    <span>@item.InterviewName</span>
+                </div>
+                <div class="row">
+                    <h3>Interview Description:</h3>
+                    <span>@item.InterviewDescription</span>
+                </div>
+                <div class="row">
+                    <h3>Interview date/time:</h3>
+                    <span>@item.InterviewDate</span>
+                </div>
+                <div class="row">
+                    <h3>Company/Job related docs:</h3>
+                    <label>@item.InterviewDoc1</label>
+                    @if (item.InterviewDoc1 != "")
+                    {
+                        <a href="@item.InterviewDoc1" download>
+                            <b><i>Download file</i></b>
+                        </a>
+                    }
+                    <label>@item.InterviewDoc2</label>
+                    @if (item.InterviewDoc2 != "")
+                    {
+                        <a href="@item.InterviewDoc2" download>
+                            <b><i>Download file</i></b>
+                        </a>
+                    }
+                    <label>@item.InterviewDoc3</label>
+                    @if (item.InterviewDoc3 != "")
+                    {
+                        <a href="@item.InterviewDoc3" download>
+                            <b><i>Download file</i></b>
+                        </a>
+                    }
+                    <label>@item.InterviewDoc4</label>
+                    @if (item.InterviewDoc4 != "")
+                    {
+                        <a href="@item.InterviewDoc4" download>
+                            <b><i>Download file</i></b>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+    }
+
+
+
+
+
+
+</div>

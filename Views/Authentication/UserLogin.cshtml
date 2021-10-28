@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "UserLogin";
+}
+
+<style>
+    .container-user-login {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    body {
+        background-color: black;
+    }
+
+    .img-box {
+        background-image: url(../../Content/images/7-Steps-to-Firing.jpg);
+        height: 494px;
+        width: 500px;
+        float: left;
+        border-radius:40px;
+        
+        
+    }
+
+    .login-box {
+        height: 494px;
+        width: 1000px;
+        margin-top: 50px;
+        background-color: #08bc8c;
+        text-align: center;
+        border-radius: 40px;
+    }
+
+    .user-login {
+        float: right;
+        font-size: larger;
+        text-align:center;
+        margin-right:93px;
+    }
+    input {
+        margin-left:4.5%;
+    }
+    .blur {
+        background-color:black;
+        opacity:0.7;
+        height:100%;
+        width:100%;
+        border-radius:40px;
+        margin-top:-90px;
+    }
+    .img-box-content {
+        color:white;
+        margin-top: 90px;
+        width: auto;
+        font-size: larger;
+        
+    }
+    .form-group a:link {
+        background-color: black;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius:4px;
+    }
+</style>
+
+
+<div class="container-user-login">
+    <div class="login-box">
+        <div class="img-box">
+            <div class="blur">
+                <div class="img-box-content">
+
+                    <div class="row">
+                        <h1>PlaceMe</h1>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <label>Searching for a Job?</label>
+                    </div>
+                    <div class="row">
+                        <label><i><u>PlaceMe</u></i> is here for you.</label>
+                    </div>
+                    <div class="row">
+                        <label>Login today and apply for the company that you desire of.</label>
+                    </div>
+                    <div class="row">
+                        <label>Register and Login Now!</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-login">
+            <div class="row">
+                <h2>User Login</h2>
+            </div>
+            <br>
+            @using (Html.BeginForm("UserLogin", "Authentication", FormMethod.Post, new { }))
+            {
+                <div class="row">
+                    <div class="form-group">
+                        <label>Email Id:</label>
+                        <input type="email" class="form-control" name="UserEmailId" placeholder="Enter Email Id" required>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" class="form-control" name="Password" placeholder="Enter Password" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" style="background-color:black;">Login</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <span class="label label-danger">@ViewBag.Message</span>
+                    </div>
+                </div>
+
+            }
+            <div class="row">
+                <div class="form-group">
+                    <label>Don't have an Account? Register Now!</label>
+                </div>
+                <div class="form-group">
+                    <a>@Html.ActionLink("Register", "UserRegistration", "Authentication")</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

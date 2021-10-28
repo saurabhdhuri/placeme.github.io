@@ -1,0 +1,432 @@
+﻿
+@{
+    ViewBag.Title = "Manage Companies";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var admin = Session["Admin"] as PlaceMe.Models.Admin;
+
+    var companies = ViewBag.companies as IEnumerable<PlaceMe.Models.Company>;
+}
+
+@if (admin == null)
+{
+    Context.Response.Redirect(Url.Content("~/Authentication/AdminLogin"));
+}
+
+
+<style>
+    .addcompany .row-1, .addcompany .row-2, .addcompany .row-5 {
+        margin-left: 20%;
+    }
+
+    a {
+        color: inherit;
+    }
+
+        a:hover {
+            color: dodgerblue;
+        }
+
+    .addcompany .row-3 {
+        margin-left: 6%;
+    }
+
+    h4, h4:hover {
+        padding: 3px 3px 3px 3px;
+    }
+</style>
+
+<div class="container">
+
+    <div class="row">
+        <h2>Manage Companies</h2>
+    </div>
+    <!--Add Company Details -->
+
+    @using (Html.BeginForm("AddCompany", "Admin", new { }))
+    {
+        <input type="text" value="@admin.AdminName" name="AdminName" hidden>
+
+        <div class="add-company">
+            <a data-toggle="collapse" href="#collapse-company-info" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <div class="row">
+                    <div class="form-group">
+                        <h4>
+                            Add Company info<span class="caret"></span>
+                        </h4>
+                    </div>
+                </div>
+            </a>
+
+            <div class="row row-1 collapse" id="collapse-company-info">
+                <div class="form-group col-md-4">
+                    <label>Company Name:</label>
+                    <input type="text" class="form-control" name="CompanyName" placeholder="Enter Company Name" required>
+                </div>
+
+                <div class="form-group col-md-8">
+                    <label>Company Description:</label>
+                    <textarea class="form-control" rows="3" id="textArea" spellcheck="false" name="CompanyDescription" placeholder="Enter Company Description" required></textarea>
+                </div>
+
+            </div>
+
+            <a data-toggle="collapse" href="#collapse-contact-info" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <div class="row">
+                    <div class="form-group">
+                        <h4>Add Company Contact Details<span class="caret"></span></h4>
+                    </div>
+                </div>
+            </a>
+            <div class="row row-2 collapse" id="collapse-contact-info">
+                <div class="form-group col-md-4">
+                    <label>Company Email:</label>
+                    <input type="email" class="form-control" name="CompanyEmailId" placeholder="Enter Company email" required>
+                </div>
+
+                <div class="form-group col-md-8">
+                    <label>Company Contact No.:</label>
+                    <input type="tel" class="form-control" name="CompanyContact" placeholder="Enter Company Contact No." required>
+                </div>
+
+            </div>
+
+            <a data-toggle="collapse" href="#collapse-job-info" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <div class="row">
+                    <div class="form-group">
+                        <h4>Add Job Details<span class="caret"></span></h4>
+                    </div>
+                </div>
+            </a>
+
+            <div class="row row-3 collapse" id="collapse-job-info">
+                <div class="form-group col-md-4">
+                    <label>Job Profile:</label>
+                    <input type="text" class="form-control" name="JobProfile" placeholder="Enter Job Profile" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Job Openings:</label>
+                    <input type="text" class="form-control" name="JobOpenings" placeholder="Enter Job Openings" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Job Requirements:</label>
+                    <textarea class="form-control" name="JobRequirements" placeholder="Enter Job Requirements" required></textarea>
+                </div>
+            </div>
+
+            <a data-toggle="collapse" href="#collapse-doc-info" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <div class="row">
+                    <h4>Add Company/Job related Documents (if any)<span class="caret"></span></h4>
+                </div>
+            </a>
+            <div class="row row-4 collapse" id="collapse-doc-info">
+                <div class="form-group col-md-3">
+                    <label>Attach Document 1:</label>
+                    <input type="file" class="form-control" name="DocAttachment1">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Attach Document 2:</label>
+                    <input type="file" class="form-control" name="DocAttachment2">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Attach Document 3:</label>
+                    <input type="file" class="form-control" name="DocAttachment3">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Attach Document 4:</label>
+                    <input type="file" class="form-control" name="DocAttachment4">
+                </div>
+            </div>
+
+            <a data-toggle="collapse" href="#collapse-criteria-info" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <div class="row">
+                    <div class="form-group">
+                        <h4>Add Criteria<span class="caret"></span></h4>
+                    </div>
+                </div>
+            </a>
+
+            <div class="row row-5 collapse" id="collapse-criteria-info">
+                <div class="form-group col-md-4">
+                    <label>Job SSC Criteria Percentage(%):</label>
+                    <input type="text" class="form-control" name="SscCriteria" placeholder="Enter percentage" required>
+                </div>
+                <div class="form-group col-md-8">
+                    <label>Job HSC Criteria Percentage(%):</label>
+                    <input type="text" class="form-control" name="HscCriteria" placeholder="Enter percentage" required>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="form-group col-md-offset-5">
+                    <button type="button" data-toggle="modal" data-target="#addmodal" class="btn btn-info">Add Company</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!--Add Confirm Modal -->
+        <div class="modal fade" id="addmodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="container-fluid">
+                        <div class="modal-header">
+                            <div class="row">
+                                <h2>Confirm Add Company?</h2>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="form-group">
+                                    <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+
+                                    <button type="submit" name="AddCompany" class="btn btn-info">Add Company</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    }
+</div>
+
+<!--Company List -->
+<br />
+<div class="row">
+    <h2>Companies</h2>
+</div>
+<br />
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="info">
+            <th>Company Name</th>
+            <th>Email</th>
+            <th>Contact No.</th>
+            <th>Job Profile</th>
+            <th>Openings</th>
+            <th>SSC Criteria(%)</th>
+            <th>HSC Criteria(%)</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in companies)
+        {
+            <tr>
+                <td>@item.CompanyName</td>
+                <td>@item.CompanyEmailId</td>
+                <td>@item.CompanyContact</td>
+                <td>@item.JobProfile</td>
+                <td>@item.JobOpenings</td>
+                <td>@item.SscCriteria%</td>
+                <td>@item.HscCriteria%</td>
+                <td><button data-toggle="modal" data-target="#editmodal_@item.CompanyId" class="btn btn-info">Edit</button></td>
+                <td><button data-toggle="modal" data-target="#deletemodal_@item.CompanyId" class="btn btn-danger">Delete</button></td>
+            </tr>
+
+            <!--Edit Company Details -->
+            <div class="modal fade" id="editmodal_@item.CompanyId" tabindex="-1" role="dialog">
+                @using (Html.BeginForm("UpdateCompany", "Admin", new { }))
+                {
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class=container-fluid>
+
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Edit Company Details:</h2>
+                                        <input type="text" value="@item.CompanyId" name="CompanyId" hidden />
+                                        <input type="text" value="@admin.AdminName" name="AdminName" hidden />
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="edit-company">
+                                        <a data-toggle="collapse" href="#collapse-company-info-edit_@item.CompanyId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <h4>
+                                                        Add Company info<span class="caret"></span>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <div class="row row-1 collapse" id="collapse-company-info-edit_@item.CompanyId">
+                                            <div class="form-group col-md-4">
+                                                <label>Company Name:</label>
+                                                <input type="text" class="form-control" name="CompanyNameEdit" value="@item.CompanyName">
+                                            </div>
+
+                                            <div class="form-group col-md-8">
+                                                <label>Company Description:</label>
+                                                <textarea class="form-control" rows="3" id="textArea" spellcheck="false" name="CompanyDescriptionEdit">@item.CompanyDescription</textarea>
+                                            </div>
+
+                                        </div>
+
+                                        <a data-toggle="collapse" href="#collapse-contact-info-edit_@item.CompanyId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <h4>Add Company Contact Details<span class="caret"></span></h4>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="row row-2 collapse" id="collapse-contact-info-edit_@item.CompanyId">
+                                            <div class="form-group col-md-6">
+                                                <label>Company Email:</label>
+                                                <input type="email" class="form-control" name="CompanyEmailIdEdit" value="@item.CompanyEmailId">
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label>Company Contact No.:</label>
+                                                <input type="tel" class="form-control" name="CompanyContactEdit" value="@item.CompanyContact">
+                                            </div>
+
+                                        </div>
+
+                                        <a data-toggle="collapse" href="#collapse-job-info-edit_@item.CompanyId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <h4>Add Job Details<span class="caret"></span></h4>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <div class="row row-3 collapse" id="collapse-job-info-edit_@item.CompanyId">
+                                            <div class="form-group col-md-4">
+                                                <label>Job Profile:</label>
+                                                <input type="text" class="form-control" name="JobProfileEdit" value="@item.JobProfile">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Job Openings:</label>
+                                                <input type="text" class="form-control" name="JobOpeningsEdit" value="@item.JobOpenings">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Job Requirements:</label>
+                                                <textarea class="form-control" name="JobRequirementsEdit">@item.JobRequirements</textarea>
+                                            </div>
+                                        </div>
+
+                                        <a data-toggle="collapse" href="#collapse-doc-info-edit_@item.CompanyId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <div class="row">
+                                                <h4>Add Company/Job related Documents (if any)<span class="caret"></span></h4>
+                                            </div>
+                                        </a>
+                                        <div class="row row-4 collapse" id="collapse-doc-info-edit_@item.CompanyId">
+                                            <div class="form-group col-md-3">
+                                                <label>Attach Document 1:</label>
+                                                <input type="file" class="form-control" name="DocAttachment1Edit" value="@item.DocAttachment1"><span>@item.DocAttachment1</span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Attach Document 2:</label>
+                                                <input type="file" class="form-control" name="DocAttachment2Edit" value="@item.DocAttachment2"><span>@item.DocAttachment2</span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Attach Document 3:</label>
+                                                <input type="file" class="form-control" name="DocAttachment3Edit" value="@item.DocAttachment3"><span>@item.DocAttachment3</span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label>Attach Document 4:</label>
+                                                <input type="file" class="form-control" name="DocAttachment4Edit" value="@item.DocAttachment4"><span>@item.DocAttachment4</span>
+                                            </div>
+                                        </div>
+
+                                        <a data-toggle="collapse" href="#collapse-criteria-info-edit_@item.CompanyId" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                            <div class="row">
+                                                <div class="form-group">
+                                                    <h4>Add Criteria<span class="caret"></span></h4>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <div class="row row-5 collapse" id="collapse-criteria-info-edit_@item.CompanyId">
+                                            <div class="form-group col-md-6">
+                                                <label>Job SSC Criteria Percentage(%):</label>
+                                                <input type="text" class="form-control" name="SscCriteriaEdit" value="@item.SscCriteria">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Job HSC Criteria Percentage(%):</label>
+                                                <input type="text" class="form-control" name="HscCriteriaEdit" value="@item.HscCriteria">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+
+                                            <button type="submit" name="EditCompany" class="btn btn-info">Edit Company</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+
+
+            <!--Delete Company -->
+            <div class="modal fade" id="deletemodal_@item.CompanyId" tabindex="-1" role="dialog">
+                @using (Html.BeginForm("DeleteCompany", "Admin", new { }))
+                {
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="container-fluid">
+                                <div class="modal-header">
+                                    <div class="row">
+                                        <h2>Are you Sure?</h2>
+                                        <input type="text" value="@item.CompanyId" name="CompanyId" hidden />
+                                        <input type="text" value="@admin.AdminName" name="AdminName" hidden />
+                                    </div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <label style="font-size:large;">Delete Company @item.CompanyName?</label>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <button type="button" data-dismiss="modal" class="btn btn-info">Close</button>
+
+                                            <button type="submit" name="DeleteCompany" class="btn btn-danger">Delete Company</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+
+        }
+
+    </tbody>
+
+</table>
+
+
+
+
+
+
+    </div>
+

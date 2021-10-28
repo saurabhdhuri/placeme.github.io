@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "QualificationDetails";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = Session["User"] as PlaceMe.Models.User;
+
+    var userqualification = ViewBag.userqualifications;
+
+}
+
+@if (user == null)
+{
+
+    Context.Response.Redirect(Url.Content("~/Authentication/UserLogin"));
+}
+
+<style>
+    .qualification {
+        text-align:center;
+        font-size:large;
+    }
+</style>
+
+
+<div class="container">
+    <h1>Edit Qualification Details</h1>
+
+    <!--Add/Edit Qualification Details -->
+
+    @using (Html.BeginForm("UpdateUserQualification", "User", new { }))
+    {
+
+<div class="qualification">
+    <br>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>SSC Percentage:</label>
+            </div>
+
+            <input type="text" class="form-control" name="SscPercentage" value="@userqualification.SscPercentage">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>HSC Percentage:</label>
+            </div>
+            <input type="text" class="form-control" name="HscPercentage" value="@userqualification.HscPercentage">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Undergraduate Course Name:(Enter "NA" if Not Applicable)</label>
+            </div>
+            <input type="text" class="form-control" name="UgCourseName" value="@userqualification.UgCourseName">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Undergraduate Percentage(%):</label>
+            </div>
+            <input type="text" class="form-control" name="UgPercentage" value="@userqualification.UgPercentage">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Postgraduate Course Name:(Enter "NA" if Not Applicable)</label>
+            </div>
+            <input type="text" class="form-control" name="PgCourseName" value="@userqualification.PgCourseName">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Postgraduate Percentage(%):</label>
+            </div>
+            <input type="text" class="form-control" name="PgPercentage" value="@userqualification.PgPercentage">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Resume: </label>
+            </div>
+            <input type="file"  class="col-lg-3 form-control" name="Resume" value="@userqualification.Resume">
+            <span style="font-size:large;" class="col-lg-1">@userqualification.Resume</span>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="form-group">
+            <button type="button" data-toggle="modal" data-target="#confirm_@userqualification.QualificationId" class="btn btn-success">Save Details</button>
+        </div>
+    </div>
+</div>
+
+        <!--Confirm Modal -->
+        <div class="modal fade" id="confirm_@userqualification.QualificationId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <input type="text" name="UserFirstName" value="@user.UserFirstName" hidden />
+                        <input type="text" name="UserId" value="@user.UserId" hidden />
+                        <h3 class="modal-title" id="exampleModalLabel">Confirm?</h3>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to save changes?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    }
+</div>
+
+
+
+

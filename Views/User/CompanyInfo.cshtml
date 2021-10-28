@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "CompanyInfo";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = Session["User"] as PlaceMe.Models.User;
+
+    var userapplications = ViewBag.userapplications;
+    var company = ViewBag.company;
+}
+
+@if (user == null)
+{
+    Context.Response.Redirect(Url.Content("~/Authentication/UserLogin"));
+}
+
+<style>
+    .company-info {
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    
+    <h1> Company Info</h1>
+    <div class="company-info">
+        <div class="row">
+            <h3>Company Name: &nbsp;&nbsp; <i>@company.CompanyName</i></h3>
+        </div>
+
+        <div class="row">
+
+            <h3>About: &nbsp;&nbsp; <i>@company.CompanyDescription</i></h3>
+        </div>
+
+        <div class="row">
+            <h3>Job Profile: &nbsp;&nbsp;<i>@company.JobProfile</i></h3>
+        </div>
+
+        <div class="row">
+            <h3>Job Requirements: &nbsp;&nbsp;<i>@company.JobRequirements</i></h3>
+        </div>
+
+        <div class="row">
+            <h3>Job Openings:&nbsp;&nbsp;<i> @company.JobOpenings</i></h3>
+        </div>
+
+        <div class="row">
+            <h3>SSC Criteria:&nbsp;&nbsp; <i>@company.SscCriteria</i></h3>
+            <h3>HSC Criteria:&nbsp;&nbsp; <i>@company.HscCriteria</i></h3>
+        </div>
+
+
+        @if (userapplications.ApplicationId != 0)
+        {
+        <br />
+        <div class="row">
+            <button type="button" class="btn btn-success" disabled>Apply</button>
+        </div>
+        <div class="row">
+            <span class="label-danger">Already Applied!</span>
+        </div>
+        }
+        else
+        {
+        <br />
+        <div class="row">
+            <button type="button" data-toggle="modal" data-target="#confirm_@company.CompanyId" class="btn btn-success">Apply</button>
+        </div>
+        }
+
+
+        <div class="row">
+            <span class="label-danger">@ViewBag.Message</span>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("AddUserApplication", "User", FormMethod.Post, new { }))
+    {
+        <!--Confirm Modal -->
+        <div class="modal fade" id="confirm_@company.CompanyId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <input type="text" name="CompanyId" value="@company.CompanyId" hidden />
+                        <input type="text" name="UserId" value="@user.UserId" hidden />
+                        <input type="text" name="UserFirstName" value="@user.UserFirstName" hidden />
+                        <h3 class="modal-title" id="exampleModalLabel">Confirm?</h3>
+                    </div>
+                    <div class="modal-body">
+                        <label>Do you really want to apply for this Job Profile?</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                        <button type="submit" class="btn btn-success">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+
+
+</div>
+

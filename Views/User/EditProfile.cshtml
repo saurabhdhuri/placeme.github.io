@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "EditProfile";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = Session["User"] as PlaceMe.Models.User;
+
+    var users = ViewBag.users;
+}
+
+@if (user == null)
+{
+    
+    Context.Response.Redirect(Url.Content("~/Authentication/UserLogin"));
+}
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("pass").value;
+        var y = document.getElementById("confirmpass").value;
+        if (x == y) {
+            document.getElementById("match").innerHTML = "Passwords Match!";
+        }
+        else {
+            document.getElementById("match").innerHTML = "Passwords not Matching";
+        }
+
+    }
+</script>
+<style>
+    .edit-profile {
+        text-align:center;
+        font-size:large;
+    }
+
+</style>
+
+
+<div class="container">
+
+    <!--Edit Personal Details -->
+    <h1>Edit Profile</h1>
+
+    @using (Html.BeginForm("UpdateProfile", "User", new { }))
+    {
+<div class="edit-profile">
+    
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>First Name:</label>
+            </div>
+            <input type="text" class="form-control" name="UserFirstNameEdit" value="@users.UserFirstName">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Last Name:</label>
+            </div>
+            <input type="text" class="form-control" name="UserLastNameEdit" value="@users.UserLastName">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Email Id:</label>
+            </div>
+            <input type="email" class="form-control" name="UserEmailIdEdit" value="@users.UserEmailId">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Contact No.:</label>
+            </div>
+            <input type="tel" class="form-control" name="UserContactEdit" value="@users.UserContact">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Password:</label>
+            </div>
+            <input type="password" id="pass" class="form-control" name="PasswordEdit" value="@users.Password" oninput="myFunction()">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-lg-6">
+                <label>Confirm Password:</label>
+            </div>
+            <input type="password" id="confirmpass" class="form-control" name="ConfirmPasswordEdit" value="@users.Password" oninput="myFunction()">
+            <span class="label-danger" id="match"></span>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <input type="text" value="@users.UserId" name="UserId" hidden />
+            <button type="button" data-toggle="modal" data-target="#confirm" class="btn btn-success">Edit Details</button>
+        </div>
+    </div>
+</div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">Confirm?</h3>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to save the changes?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+                        <button type="submit" class="btn btn-success">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    }
+
+
+
+</div>
+
